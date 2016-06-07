@@ -21,6 +21,11 @@
 	var dy = -2;
 	var ballRadius = 10;
 	var defaultColor = "#0095DD";
+	var paddleHeight = 10;
+	var paddleWidth = 75;
+	var paddleX = (canvas.width-paddleWidth)/2;
+	var rightPressed = false;
+	var leftPressed = false;
 	
 	function drawBall() {
 		ctx.beginPath();
@@ -29,12 +34,19 @@
 		ctx.fill();
 		ctx.closePath();
 	}
+	
+	function drawPaddle() {
+		ctx.beginPath();
+		ctx.rect(paddleX, canvas.height-paddleHeight, paddleWidth, paddleHeight);
+		ctx.fillStyle = "#0095DD";
+		ctx.fill();
+		ctx.closePath();
+	}
 
 	function draw() {
 		ctx.clearRect(0, 0, canvas.width, canvas.height);
 		drawBall();
-		x += dx;
-		y += dy;
+		drawPaddle();
 		
 		if(x + dx > canvas.width-ballRadius || x + dx < ballRadius) {
 		dx = -dx;
@@ -46,6 +58,37 @@
 			dy = -dy;
 		/*Uncomment code below if you wish to change color of ball on every collision randomly*/
 		//defaultColor = '#'+(Math.random()*0xFFFFFF<<0).toString(16); //BUG - Produces 5 digit hex sometimes instead of 6
+		}
+		
+		if(rightPressed && paddleX < canvas.width-paddleWidth) {
+			paddleX += 7;
+		}
+		else if(leftPressed && paddleX > 0) {
+			paddleX -= 7;
+		}
+		
+		x += dx;
+		y += dy;
+	}
+	
+	document.addEventListener("keydown", keyDownHandler, false);
+	document.addEventListener("keyup", keyUpHandler, false);
+	
+	function keyDownHandler(e) {
+		if(e.keyCode == 39) {
+			rightPressed = true;
+		}
+		else if(e.keyCode == 37) {
+			leftPressed = true;
+		}
+	}
+
+	function keyUpHandler(e) {
+		if(e.keyCode == 39) {
+			rightPressed = false;
+		}
+		else if(e.keyCode == 37) {
+			leftPressed = false;
 		}
 	}
 	setInterval(draw,10);
