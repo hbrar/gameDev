@@ -54,10 +54,18 @@
 		//defaultColor = '#'+(Math.random()*0xFFFFFF<<0).toString(16); //BUG - Produces 5 digit hex sometimes instead of 6
 		}
 
-		if(y + dy > canvas.height-ballRadius || y + dy < ballRadius) {
+		if(y + dy < ballRadius) {
 			dy = -dy;
 		/*Uncomment code below if you wish to change color of ball on every collision randomly*/
 		//defaultColor = '#'+(Math.random()*0xFFFFFF<<0).toString(16); //BUG - Produces 5 digit hex sometimes instead of 6
+		} else if(y + dy > canvas.height-ballRadius) {
+			if(x > paddleX && x < paddleX + paddleWidth) {
+				dy = -dy;
+			}
+			else {
+				alert("GAME OVER");
+				document.location.reload();
+			}
 		}
 		
 		if(rightPressed && paddleX < canvas.width-paddleWidth) {
